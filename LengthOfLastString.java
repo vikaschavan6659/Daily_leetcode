@@ -13,7 +13,7 @@ public class LengthOfLastString {
     }
 
     public static void main(String[] args) {
-        Solution solution = new Solution();
+        LengthOfLastString solution = new LengthOfLastString();
 
         // Test cases
         String s1 = "Hello World";
