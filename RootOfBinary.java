@@ -7,22 +7,65 @@ Return the total sum of all root-to-leaf numbers. Test cases are generated so th
 
 A leaf node is a node with no children.*/
 
+
 import javax.swing.tree.TreeNode;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class RootOfBinary {
-    public int sumNumbers(TreeNode root) {
-        return dfs(root, 0);
+    // TreeNode class definition
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+
+        TreeNode(int val) {
+            this.val = val;
+        }
     }
 
-    private int dfs(TreeNode node, int pathSum) {
-        if (node == null)
-            return 0;
+    // addOneRow method definition
+    public TreeNode addOneRow(TreeNode root, int val, int depth) {
+        // If depth is 1, create a new root with the given value
+        if (depth == 1) {
+            TreeNode newRoot = new TreeNode(val);
+            newRoot.left = root;
+            return newRoot;
+        }
 
-        pathSum = pathSum * 10 + node.val;
+        // Queue for breadth-first traversal
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int curDepth = 1;
 
-        if (node.left == null && node.right == null)
-            return pathSum;
+        // Traverse the tree
+        while (curDepth < depth - 1) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
 
-        return dfs(node.left, pathSum) + dfs(node.right, pathSum);
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                }
+            }
+            curDepth++;
+        }
+
+        // Add new nodes at the specified depth
+        while (!queue.isEmpty()) {
+            TreeNode cur = queue.poll();
+
+            TreeNode leftNode = new TreeNode(val);
+            leftNode.left = cur.left;
+            cur.left = leftNode;
+
+            TreeNode rightNode = new TreeNode(val);
+            rightNode.right = cur.right;
+            cur.right = rightNode;
+        }
+
+        return root;
     }
 }
